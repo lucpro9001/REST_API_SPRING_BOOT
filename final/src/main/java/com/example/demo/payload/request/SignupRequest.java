@@ -1,5 +1,4 @@
 package com.example.demo.payload.request;
-import java.util.Set;
 
 import javax.validation.constraints.*;
 
@@ -14,8 +13,6 @@ public class SignupRequest {
   @Size(max = 50)
   @Email
   private String email;
-
-  private Set<ERole> role;
 
   @NotBlank
   @Size(min = 6, max = 40)
@@ -43,15 +40,6 @@ public class SignupRequest {
 
   public void setPassword(String password) {
     this.password = password;
-  }
-
-  public Set<ERole> getRole() {
-    return role;
-  }
-
-  
-  public void setRole(Set<ERole> role) {
-    this.role = role;
   }
   
 }

@@ -43,7 +43,7 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<?> updateUser(User user) {
         var temp = userRepository.findById(user.getId());
-        if (temp == null)
+        if (temp.isEmpty())
             return new ResponseEntity<>(
                     new MessageResponse("Error: User id is not found"),
                     HttpStatus.NOT_FOUND);
@@ -55,7 +55,7 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<?> delete(Long id) {
         var temp = userRepository.findById(id);
-        if (temp == null)
+        if (temp.isEmpty())
             return new ResponseEntity<>(
                 new MessageResponse("Error: User id is not found"),
                 HttpStatus.NOT_FOUND);
@@ -71,29 +71,11 @@ public class UserService implements IUserService {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
-        Set<ERole> strRoles = signUpRequest.getRole();
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-            roles.add(userRole);
-        } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case ROLE_MODERATOR:
-                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        }
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+        roles.add(userRole);
 
         user.setRoles(roles);
         var res = userRepository.save(user);
@@ -103,7 +85,7 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<?> giveModerator(Long id) {
         var query = userRepository.findById(id);
-        if (query == null)
+        if (query.isEmpty())
             return new ResponseEntity<>(
                 new MessageResponse("Error: User id is not found"),
                 HttpStatus.NOT_FOUND);
@@ -123,7 +105,7 @@ public class UserService implements IUserService {
     @Override
     public ResponseEntity<?> takeModerator(Long id) {
         var query = userRepository.findById(id);
-        if (query == null)
+        if (query.isEmpty())
             return new ResponseEntity<>(
                 new MessageResponse("Error: User id is not found"),
                 HttpStatus.NOT_FOUND);
