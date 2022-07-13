@@ -21,8 +21,8 @@
   + modelmapper
 ## 3. Usage
  - Clone or download this repo
- - Create 'images folder' at /source/main/resource/static
+ - Create 'images' folder at /source/main/resource/static
  - Modify application.properties file
- - Run and enjoy
+ - Run and go 'localhost:port/swagger-ui/index.html'
  
  
